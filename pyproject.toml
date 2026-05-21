@@ -1,0 +1,19 @@
+[project]
+name = "flapper-bird"
+version = "0.1.0"
+description = "A minimal black-and-white flapping arcade game built with pygame."
+readme = "README.md"
+authors = [
+    { name = "denny200897", email = "dennyjick@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pygame>=2.6.1",
+]
+
+[project.scripts]
+flapper-bird = "flapper_bird:main"
+
+[build-system]
+requires = ["uv_build>=0.10.7,<0.11.0"]
+build-backend = "uv_build"
