@@ -234,12 +234,15 @@ class Game:
             return False
 
         if event.type == pygame.KEYDOWN:
+            typed = getattr(event, "unicode", "").lower()
             if event.key == pygame.K_ESCAPE:
                 return False
-            if event.key == pygame.K_h and self.scene == Scene.TITLE:
+            if self.is_help_key(event, typed) and self.scene in (Scene.TITLE, Scene.PAUSED, Scene.GAME_OVER):
                 self.scene = Scene.HOW_TO_PLAY
                 play_sound(self.assets, "swoosh")
-            elif event.key in (pygame.K_h, pygame.K_r, pygame.K_BACKSPACE) and self.scene == Scene.HOW_TO_PLAY:
+            elif self.scene == Scene.HOW_TO_PLAY and (
+                self.is_help_key(event, typed) or event.key in (pygame.K_r, pygame.K_BACKSPACE)
+            ):
                 self.scene = Scene.TITLE
                 play_sound(self.assets, "swoosh")
             elif event.key == pygame.K_p and self.scene == Scene.PLAYING:
@@ -256,6 +259,9 @@ class Game:
             self.start() if self.scene in (Scene.TITLE, Scene.HOW_TO_PLAY, Scene.GAME_OVER) else self.flap()
 
         return True
+
+    def is_help_key(self, event: pygame.event.Event, typed: str) -> bool:
+        return event.key in (pygame.K_h, pygame.K_F1, pygame.K_SLASH) or typed in ("h", "?")
 
     def flap(self) -> None:
         if self.scene == Scene.PLAYING:
