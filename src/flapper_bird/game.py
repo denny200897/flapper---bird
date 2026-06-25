@@ -36,9 +36,12 @@ FLAP_STRENGTH = -8.35
 MAX_FALL_SPEED = 10.5
 
 GATE_WIDTH = 82
-GATE_GAP = 174
-GATE_SPACING = 225
-BASE_GATE_SPEED = 3.25
+GATE_GAP = 205
+GATE_SPACING = 248
+BASE_GATE_SPEED = 2.75
+SPEED_UP_EVERY = 8
+SPEED_UP_AMOUNT = 0.12
+MAX_SPEED_BONUS = 0.72
 
 SAVE_PATH = Path.home() / ".flapper_bird_score.json"
 
@@ -287,7 +290,7 @@ class Game:
             self.bird.wing_phase += 0.15
             return
 
-        speed = BASE_GATE_SPEED + min(1.45, self.score * 0.055)
+        speed = gate_speed_for_score(self.score)
         self.bird.update()
 
         for gate in self.gates:
@@ -410,7 +413,11 @@ class Game:
 
 
 def random_gap_y() -> int:
-    return random.randint(PLAY_TOP + 108, PLAY_BOTTOM - 108)
+    return random.randint(PLAY_TOP + 128, PLAY_BOTTOM - 128)
+
+
+def gate_speed_for_score(score: int) -> float:
+    return BASE_GATE_SPEED + min(MAX_SPEED_BONUS, score // SPEED_UP_EVERY * SPEED_UP_AMOUNT)
 
 
 def score_sparks() -> list[Particle]:
